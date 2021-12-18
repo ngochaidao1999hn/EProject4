@@ -1,0 +1,46 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<style>
+    .field input {
+        background-color: white;
+        color: black;
+    }
+
+    .section {
+        height: 600px;
+    }
+</style>
+
+<div class="section layout_padding about_bg">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-8">
+                <div class="full paddding_left_15">
+                    <div class="heading_main text_align_left">
+                        <h2>Withdraw</h2>
+                    </div>
+                    <form action="/WithDrawing/Index" method="post">
+                        <div class="field">
+                            <input id="money" autocomplete="off" value="@ViewBag.amout" type="text" placeholder="Enter amount of cash you wish to withdraw" name="str_amount" />
+                            <strong style="color:red;" id="error"></strong>
+                                <button class="btn btn-light" id="go">Confirm</button>
+                        </div>
+                        @ViewBag.err
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="~/Scripts/jquery-1.10.2.js"></script>
+<script>
+    $("#money").on('input', function () {
+        var value = $(this).val().replaceAll('.', '');
+        var money = new Number(value).toLocaleString("vi-VN");
+        console.log(money);
+        $(this).val(money);            
+    });
+</script>

@@ -1,0 +1,89 @@
+﻿@using Project4Aptech.Models
+@{
+    ViewBag.Title = "Home Page";
+    var logged = (Account)Session["logged"];
+}
+<style>
+    .heading_main h2::after {
+        width: auto;
+        transform: none;
+    }
+</style>
+
+<div class="section layout_padding about_bg">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-8">
+                <div class="full paddding_left_15">
+                    <div class="heading_main text_align_left">
+                        <h2>Service</h2>
+                    </div>
+                    <!--<input type="checkbox" onclick="myFunction()">Show/Hide-->
+
+                    <div class="heading_main text_align_left">
+                        <h2><a href="/Accounts/ChuyenTien/@logged.Customers.Id">Deposit cash</a></h2>
+                    </div>
+                    <div class="heading_main text_align_left">
+                        <h2><a href="/WithDrawing/Index">Withdraw cash</a></h2>
+                    </div>
+                    <div class="heading_main text_align_left">
+                        <h2><a href="~/TransactHis/Index/@logged.Customers.Id">Transaction history</a></h2>
+                    </div>
+
+                    <div class="heading_main text_align_left">
+                        <h2>
+                            Your balance:
+                            <span id="myInput">@ViewBag.balance </span> VND
+                        </h2>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@if (ViewBag.fl != null)
+{
+    <a>@ViewBag.fl </a>
+}
+@section scripts{
+
+    <script src="~/Scripts/jquery.signalR-2.2.2.js"></script>
+    <script src="~/signalr/hubs"></script>
+
+    <script>
+        $(function () {
+            var id = @logged.Customers.acc_num;
+            // Reference the auto-generated proxy for the hub.
+            var userBalance = $.connection.TPHub;
+            console.log("HEHE"+id);
+            // Create a function that the hub can call back to display messages.
+            userBalance.client.Receive = function (balance) {
+                // Add the message to the page.
+                $('#myInput').empty();
+                $('#myInput').append(balance);
+            };
+
+            $.connection.hub.start().done(function () {
+
+                    // Call the Send method on the hub.
+                    userBalance.server.send(id);
+
+
+            });
+        });
+        // This optional function html-encodes messages for display in the page.
+       function myFunction() {
+        var x = document.getElementById("myInput");
+        if (x.type === "password") {
+            x.type = "text";
+        } else {
+            x.type = "password";
+        }
+    }
+    </script>
+    }
+
+
+
+
